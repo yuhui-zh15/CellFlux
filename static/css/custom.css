@@ -1,0 +1,25 @@
+.space-background {
+  /* background-image: url("../../assets/banner.png"); */
+  background-color:aliceblue;
+  /* background-color: white; */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.space-background-overlay {
+  width: 100%;
+  height: 100%;
+  /* background-color: aliceblue; Adjust the opacity (last value) as desired */
+}
+
+.approach-figure {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vw;
+}
+
+figure {
+  text-align: center; /* Center-aligns the content inside the <figure> */
+  margin: 0; /* Removes default margin */
+}
