@@ -45,7 +45,7 @@ If you use this repo in your research, please cite it as follows:
 ```
 @inproceedings{CellFlux,
   title={CellFlux: Simulating Cellular Morphology Changes via Flow Matching},
-  author={Zhang, Yuhui and Su, Yuchang and Wang, Chenyu and Li, Tianhong and Wefers, Zoe and Nirschl, Jeffrey and Burgess, James and Ding, Daisy and Lozano, Alejandro and Lundberg, Emma and others},
+  author={Zhang, Yuhui and Su, Yuchang and Wang, Chenyu and Li, Tianhong and Wefers, Zoe and Nirschl, Jeffrey and Burgess, James and Ding, Daisy and Lozano, Alejandro and Lundberg, Emma and Yeung-Levy, Serena},
   booktitle={International Conference on Machine Learning (ICML)},
   year={2025}
 }
