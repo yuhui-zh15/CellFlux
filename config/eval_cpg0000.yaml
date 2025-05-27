@@ -1,0 +1,31 @@
+# TASK NAME 
+task_name: cpg0000
+
+ood_set: null  # Set of held-out molecules 
+mol_list: null  # Subset of molecules to train on 
+trainable_emb: False
+dataset_name: 'cpg0000'
+n_channels: 5
+multimodal: False   # True if multiple perturbation modalities
+batch_correction: False  # True if batch correction task 
+batch_key: Null
+use_condition_embeddings: False
+add_controls: False  # True if controls are added to the perturbation prediction task (mapping controls to self)
+condition_embedding_dimension: null
+n_mod: 1
+modality_list:  # List of perturbation modalities
+  - Compound
+
+# DIRECTORIES FOR DATA
+image_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_sources/datasets/cpg0000_u2os_normalized_segmented_large
+data_index_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_sources/datasets/cpg0000_u2os_normalized_segmented_large/metadata/metadata_large_gene2vec_subset.csv # subset for evaluation
+embedding_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/embeddings/cpg0000/combined_embeddings.csv
+
+
+# DATA HANDLEMENT 
+augment_train: True 
+normalize: True
+batch_size: 32
+iter_ctrl: False
+pin_mem: True
+num_workers: 10

@@ -1,0 +1,29 @@
+# TASK NAME 
+task_name: rxrx1
+
+ood_set: Null  # Set of held-out molecules 
+mol_list: Null  # Subset of molecules to train on 
+trainable_emb: False
+dataset_name: 'rxrx1'
+n_channels: 6
+multimodal: False
+batch_correction: False
+batch_key: Null
+use_condition_embeddings: False
+add_controls: False
+condition_embedding_dimension: null
+modality_list: 
+  - Compound
+
+# DIRECTORIES FOR DATA
+image_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/rxrx1/
+data_index_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/rxrx1/metadata/rxrx1_df_subset.csv
+embedding_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/embeddings/csv/rxrx1_gene2vec_embeddings.csv
+
+# DATA HANDLEMENT 
+augment_train: True 
+normalize: True
+batch_size: 32
+iter_ctrl: False
+pin_mem: True
+num_workers: 10

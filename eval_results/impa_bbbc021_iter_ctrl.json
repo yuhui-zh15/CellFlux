@@ -1,0 +1,32 @@
+{
+    "synthetic_samples_path": "/share/pi/syyeung/yuhuiz/Cell/IMPA_reproduce/outputs/bbbc021_all_iter_ctrl/epoch-200/fid_samples",
+    "overall_fid": 17.997207641601562,
+    "overall_kid": {
+        "mean": 0.011016900651156902,
+        "std": 0.002694490132853389
+    },
+    "average_fid": 60.36188888549805,
+    "average_kid": {
+        "mean": 0.011471149128149538,
+        "std": 0.002892447087694617
+    },
+    "fid_per_class": {
+        "AZ138": 47.6623649597168,
+        "AZ258": 49.54212951660156,
+        "PD-169316": 47.36177062988281,
+        "PP-2": 60.9111442565918,
+        "alsterpaullone": 50.70835494995117,
+        "bryostatin": 55.19429016113281,
+        "camptothecin": 59.59812927246094,
+        "chlorambucil": 72.37481689453125,
+        "cisplatin": 62.761619567871094,
+        "colchicine": 75.98211669921875,
+        "cytochalasin B": 54.98637390136719,
+        "etoposide": 58.41777038574219,
+        "floxuridine": 83.0728530883789,
+        "methotrexate": 72.64599609375,
+        "mevinolin/lovastatin": 55.72447967529297,
+        "mitomycin C": 36.36204147338867,
+        "mitoxantrone": 82.84576416015625
+    }
+}

@@ -1,0 +1,26 @@
+# TASK NAME 
+task_name: bbbc021_all
+
+ood_set: [docetaxel, AZ841, cytochalasin D, simvastatin, cyclohexamide, latrunculin B, epothilone B, lactacystin]
+mol_list: Null
+trainable_emb: False
+dataset_name: 'bbbc021'
+n_channels: 3 
+multimodal: False
+batch_correction: False
+batch_key: Null
+use_condition_embeddings: False
+add_controls: False
+condition_embedding_dimension: null
+modality_list: 
+  - Compound
+
+# DIRECTORIES FOR DATA
+image_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/bbbc021_all
+data_index_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/bbbc021_all/metadata/bbbc021_df_all.csv
+embedding_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/embeddings/csv/emb_fp.csv
+
+# DATA HANDLEMENT 
+augment_train: True 
+normalize: True
+

@@ -1,0 +1,21 @@
+python submitit_train.py \
+    --dataset=bbbc021 \
+    --batch_size=32 \
+    --accum_iter=1 \
+    --eval_frequency=25 \
+    --epochs=200 \
+    --class_drop_prob=0.2 \
+    --cfg_scale=0.2 \
+    --compute_fid \
+    --ode_method heun2 \
+    --ode_options '{"nfe": 50}' \
+    --use_ema \
+    --edm_schedule \
+    --skewed_timesteps \
+    --fid_samples=5120 \
+    --job_dir=/share/pi/syyeung/yuhuiz/Cell/CellFlow/outputs/20250221_1247_bbbc_noise1.0_drop0.2_cfg0.2_prob_0.5/ \
+    --shared_dir=/share/pi/syyeung/yuhuiz/Cell/CellFlow/shared/ \
+    --use_initial=2 \
+    --noise_level=1.0 \
+    --noise_prob=0.5 \
+    --save_fid_samples
