@@ -1,294 +1,380 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLB3DPRW48"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>CellFlux: Simulating Cellular Morphology Changes via Flow Matching</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon_io/favicon.png">
 
-    gtag('config', 'G-WLB3DPRW48');
-  </script>
-  <script
-    type="module"
-    src="https://gradio.s3-us-west-2.amazonaws.com/5.9.1/gradio.js"
-  ></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta content="CellFlux: Simulating Cellular Morphology Changes via Flow Matching" property="og:title">
-  <meta content="CellFlux: Simulating Cellular Morphology Changes via Flow Matching" property="twitter:title">
-  <meta content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching." name="description">
-  <meta content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching." property="og:description">
-  <meta content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching." property="twitter:description">
-  <meta property="og:type" content="website">
- 
-  <title>CellFlux: Simulating Cellular Morphology Changes via Flow Matching</title>
-  <meta name="description" content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching.">
-  <meta name="keywords" content="computational biology, flow matching, cellular morphology, perturbation response, drug discovery, virtual cell">
-  <link rel="icon" type="image/x-icon" href="assets/favicon_io/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_io/favicon.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_io/favicon.png">
+        <!-- Open Graph -->
+        <meta property="og:url" content="https://yuhui-zh15.github.io/CellFlux/" />
+        <meta property="og:image" content="https://yuhui-zh15.github.io/CellFlux/assets/0.png" />
+        <meta property="og:title" content="CellFlux: Simulating Cellular Morphology Changes via Flow Matching" />
+        <meta property="og:description" content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching." />
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <!-- Twitter -->
+        <meta name="twitter:url" content="https://yuhui-zh15.github.io/CellFlux/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://yuhui-zh15.github.io/CellFlux/assets/0.png" />
+        <meta name="twitter:title" content="CellFlux: Simulating Cellular Morphology Changes via Flow Matching" />
+        <meta name="twitter:description" content="Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching." />
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+        <script src="./static/js/distill_template.v2.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/custom.css">
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+        <script src="https://rawgit.com/nstrayer/slid3r/master/dist/slid3r.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
+        <script defer="" src="./static/js/hider.js"></script>
+        <script src="./static/js/image_interact.js"></script>
+        <script src="./static/js/switch_videos.js"></script>
 
-</head>
-<body>
+        <link rel="stylesheet" href="./static/css/style.css">
+        <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
-<section class="hero space-background has-text-white">
-  <div class="hero-body space-background-overlay">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-2 publication-title has-text-black">CellFlux: Simulating Cellular Morphology Changes via Flow Matching</h1>
-          <h1 class="title is-4 publication-title has-text-black">ICML 2025</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://cs.stanford.edu/~yuhuiz/" target="_blank">Yuhui Zhang\(^{1\star}\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://suyccc.github.io/" target="_blank">Yuchang Su\(^{2\star}\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://chenyuwang-monica.github.io/" target="_blank">Chenyu Wang\(^3\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.tianhongli.me/" target="_blank">Tianhong Li\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=0XwkyyEAAAAJ&hl=en" target="_blank">Zoe Wefers\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=AJJwTxoAAAAJ&hl=en" target="_blank">Jeffrey Nirschl\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://jmhb0.github.io/" target="_blank">James Burgess\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=O2HUmYsAAAAJ&hl=en" target="_blank">Daisy Ding\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://ale9806.github.io/alejandrolozano/" target="_blank">Alejandro Lozano\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://lundberglab.stanford.edu/" target="_blank">Emma Lundberg\(^1\)</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://ai.stanford.edu/~syyeung/" target="_blank">Serena Yeung-Levy\(^1\)</a>
-            </span>
-          </div>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script>
+        <script defer src="./static/js/fontawesome.all.min.js"></script>
 
-          <div class="is-size-6 publication-authors">
-            <span class="author-block">\(^1\)Stanford University</span>
-            <span class="author-block">\(^2\)Tsinghua University</span>
-            <span class="author-block">\(^3\)MIT</span>
-          </div>
+        <!-- medium zoom https://github.com/francoischalifour/medium-zoom -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>  <!-- jquery -->
+        <script defer src="./static/js/medium-zoom.min.js"></script>
+        <script defer src="./static/js/zoom.js"></script>
 
-          <div class="is-size-6 publication-authors">
-            <span class="author-block">\(^\star\)Equal contribution</span>
-          </div>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLB3DPRW48"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-WLB3DPRW48');
+        </script>
+    </head>
+    <body>
+        <div class="header-wrapper">
+            <div class="header-container" id="header-container" style="flex-direction: column; align-items: center;">
+                <div class="header-content" style="max-width: 100%; text-align: left; margin-bottom: 2rem;">
+                    <h1 style="margin-top: 0px; font-size: 2.5rem;"><i>CellFlux</i></h1>
+                    <h2 style="font-size: 1.8rem;">Simulating Cellular Morphology Changes via <i>Flow Matching</i></h2>
+                        <p style="font-size: 1.2rem; line-height: 1.6; margin: 1.5rem 0;">
+                            Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. 
+                            We introduce <em><strong>CellFlux</strong></em>, an image-generative model that simulates cellular morphology changes 
+                            induced by chemical and genetic perturbations using flow matching.
+                        </p>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2502.09775" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/yuhui-zh15/CellFlux" target="_blank" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
+                        <div class="icon-container" style="justify-content: flex-start; text-align: left; margin: 2rem 0;">
+                            <div class="icon-item" style="text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">🔮 </div>
+                                <div style="font-size: 1.05rem;"><strong>Method Overview</strong>: Predict changes in cell morphology induced by chemical or gene perturbations through distribution-to-distribution modeling using flow matching.</div>
+                            </div>
+                            <div class="icon-item" style="text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">💡 </div>
+                                <div style="font-size: 1.05rem;"><strong>Key Innovation</strong>: Formulate cellular morphology prediction as a distribution-to-distribution learning problem, distinguishing true perturbation effects from experimental artifacts.</div>
+                            </div>
+                            <div class="icon-item" style="text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">🛠️ </div>
+                                <div style="font-size: 1.05rem;"><strong>Algorithm Details</strong>: Employ flow matching to learn continuous transformations with conditional flow matching, classifier-free guidance, and U-Net architecture.</div>
+                            </div>
+                            <div class="icon-item" style="text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">💎 </div>
+                                <div style="font-size: 1.05rem;"><strong>Results & Capabilities</strong>: Achieve 35% improvement in FID scores and 12% increase in prediction accuracy with novel trajectory modeling capabilities.</div>
+                            </div>
+                        </div>
+
+                    <div class="button-container" style="justify-content: flex-start; margin: 2rem 0;">
+                        <a href="https://arxiv.org/abs/2502.09775" class="button paper-link" target="_blank">
+                            <span class="icon is-small">
+                                <i class="ai ai-arxiv"></i>
+                            </span>
+                            arXiv
+                        </a>
+                        <a href="https://arxiv.org/pdf/2502.09775" class="button paper-link" target="_blank">
+                            <span class="icon is-small">
+                                <i class="fas fa-file-pdf"></i>
+                            </span>
+                            <span>pdf</span>
+                        </a>
+                        <a href="https://github.com/yuhui-zh15/CellFlux" class="button" target="_blank">
+                            <span class="icon is-small">
+                                <i class="fab fa-github"></i>
+                            </span>
+                            <span>Code</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="header-image" style="width: 100%; max-width: 1200px; margin-top: 1rem;">
+                    <img draggable="false" src="assets/0.png" alt="CellFlux Overview" class="teaser-image" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <div class="column has-text-centered">
-          <h2 class="title is-4">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching. Unlike prior methods, CellFlux models distribution-wise transformations from unperturbed to perturbed cell states, effectively distinguishing actual perturbation effects from experimental artifacts such as batch effects—a major challenge in biological data. Evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a 35% improvement in FID scores and a 12% increase in mode-of-action prediction accuracy over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, providing a potential tool for studying perturbation dynamics. These capabilities mark a significant step toward realizing virtual cell modeling for biomedical research.
-            </p>  
-          <br>
-          </div>
+    <d-article>
+        <div class="byline">
+            <div class="byline-container">
+                <p>
+                    <a href="https://cs.stanford.edu/~yuhuiz/" class="author-link" target="_blank">Yuhui Zhang<sup>1,*</sup></a> &emsp;
+                    <a href="https://suyccc.github.io/" class="author-link" target="_blank">Yuchang Su<sup>2,*</sup></a> &emsp;
+                    <a href="https://chenyuwang-monica.github.io/" class="author-link" target="_blank">Chenyu Wang<sup>3</sup></a> &emsp;
+                    <a href="https://www.tianhongli.me/" class="author-link" target="_blank">Tianhong Li<sup>1</sup></a> &emsp;
+                    <a href="https://scholar.google.com/citations?user=0XwkyyEAAAAJ&hl=en" class="author-link" target="_blank">Zoe Wefers<sup>1</sup></a> &emsp;
+                    <a href="https://scholar.google.com/citations?user=AJJwTxoAAAAJ&hl=en" class="author-link" target="_blank">Jeffrey Nirschl<sup>1</sup></a> &emsp;
+                    <a href="https://jmhb0.github.io/" class="author-link" target="_blank">James Burgess<sup>1</sup></a> &emsp;
+                    <a href="https://scholar.google.com/citations?user=O2HUmYsAAAAJ&hl=en" class="author-link" target="_blank">Daisy Ding<sup>1</sup></a> &emsp;
+                    <a href="https://ale9806.github.io/alejandrolozano/" class="author-link" target="_blank">Alejandro Lozano<sup>1</sup></a> &emsp;
+                    <a href="https://lundberglab.stanford.edu/" class="author-link" target="_blank">Emma Lundberg<sup>1,†</sup></a> &emsp;
+                    <a href="https://ai.stanford.edu/~syyeung/" class="author-link" target="_blank">Serena Yeung-Levy<sup>1,†</sup></a>
+                    <p></p>
+                </p>
+                <div style="text-align: center;">
+                    <a href="https://stanford.edu/" class="affiliation-link" target="_blank"><sup>1</sup>Stanford University</a> &emsp;
+                    <a href="https://www.tsinghua.edu.cn/" class="affiliation-link" target="_blank"><sup>2</sup>Tsinghua University</a> &emsp;
+                    <a href="https://mit.edu/" class="affiliation-link" target="_blank"><sup>3</sup>MIT</a>
+                </div>
+                <p style="text-align: center; font-size: 1.35em; color: red; font-weight: bold;">
+                    <a href="#" target="_blank">ICML 2025</a>
+                </p>
+                <p style="text-align: center; margin-bottom: 0;">
+                    <span class="author-note"><sup>*</sup>Equal contribution</span>&emsp;
+                    <span class="author-note"><sup>†</sup>Corresponding author</span>
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
-    <!--/ Abstract -->
-    
 
-    <!-- Overview -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-4">🔮 CellFlux Overview</h2>
-        <div class="content has-text-justified">
-            <center><img id="method" src="assets/1.png" width="100%"/></center>
-            <p><strong>Overview of CellFlux.</strong></p>
-            <p><strong>(a) Objective.</strong> CellFlux aims to predict changes in cell morphology induced by chemical or gene perturbations in silico. In this example, the perturbation effect reduces the nuclear size.</p>
-            <p><strong>(b) Data.</strong> The dataset includes images from high-content screening experiments, where chemical or genetic perturbations are applied to target wells, alongside control wells without perturbations. Control wells provide prior information to contrast with target images, enabling the identification of true perturbation effects (e.g., reduced nucleus size) while calibrating non-perturbation artifacts such as batch effects—systematic biases unrelated to the perturbation (e.g., variations in color intensity).</p>
-            <p><strong>(c) Problem formulation.</strong> We formulate the task as a distribution-to-distribution problem (many-to-many mapping), where the source distribution consists of control images, and the target distribution contains perturbed images within the same batch.</p>
-            <p><strong>(d) Flow matching.</strong> CellFlux employs flow matching, a state-of-the-art generative approach for distribution-to-distribution problems. It learns a neural network to approximate a velocity field, continuously transforming the source distribution into the target by solving an ordinary differential equation (ODE).</p>
-            <p><strong>(e) Results.</strong> CellFlux significantly outperforms baselines in image generation quality, achieving lower Fréchet Inception Distance (FID) and higher classification accuracy for mode-of-action (MoA) predictions.</p>
+        <p class="text abstract">
+            Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. 
+            We introduce CellFlux, an image-generative model that simulates cellular morphology changes induced by chemical and genetic perturbations using flow matching. 
+            Unlike prior methods, CellFlux models distribution-wise transformations from unperturbed to perturbed cell states, effectively distinguishing actual perturbation effects from experimental artifacts such as batch effects—a major challenge in biological data.
+
+            <br><br>
+            Evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a <strong>35% improvement in FID scores</strong> and a <strong>12% increase in mode-of-action prediction accuracy</strong> over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, providing a potential tool for studying perturbation dynamics. These capabilities mark a significant step toward realizing virtual cell modeling for biomedical research.
+        </p>
+
+        <div class="icon-row">
+            <a href="#overview" class="icon-link">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔮</div>
+                Method<br>Overview
+            </a>
+            <a href="#innovation" class="icon-link">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💡</div>
+                Key<br>Innovation
+            </a>
+            <a href="#methods" class="icon-link">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛠️</div>
+                Algorithm<br>Details
+            </a>
+            <a href="#capabilities" class="icon-link">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💎</div>
+                Results &amp;<br>Capabilities
+            </a>
         </div>
-      </div>
-    </div>
-    <br><br>
-    <!--/ Overview -->
 
-    <!-- Key Innovation -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-4">💡 Key Innovation: Distribution-to-Distribution Transformation</h2>
-        <div class="content has-text-justified">
-          <p>CellFlux's key innovation lies in formulating cellular morphology prediction as a <strong>distribution-to-distribution learning problem</strong>. Traditional methods often ignore control cells or treat perturbation prediction as a simple image-to-image translation. In contrast, CellFlux recognizes that:</p>
-          <ul>
-            <li><strong>Control cells provide crucial context:</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects</li>
-            <li><strong>Batch effects are systematic biases:</strong> Variations in experimental conditions across different runs introduce consistent biases unrelated to the perturbation itself</li>
-            <li><strong>Distribution-wise modeling is more robust:</strong> By learning transformations between entire distributions rather than individual images, CellFlux captures the inherent variability in biological systems</li>
-          </ul>
-          <p>This approach enables CellFlux to generate more accurate and biologically meaningful cellular responses while maintaining robustness across diverse experimental conditions.</p>
+        <p class="click-hint" style="width: 85%;">
+            <img src="static/img/icons/click.gif" style="width: 1.5rem">
+            <strong>Click to jump to each section.</strong>
+        </p>
+
+        <p class="text abstract">
+            Our method represents a significant advancement in computational biology, providing researchers with powerful tools for <strong>virtual cell modeling</strong>, <strong>drug discovery</strong>, and <strong>understanding cellular dynamics</strong>. The open-source implementation enables the community to build upon this work and accelerate progress in this field.
+        </p>
+
+        <hr>
+
+        <div id='overview' class="vision-block">
+            <h1 class="text">🔮 Method Overview</h1>
+            
+            <p class="text">
+                Our method aims to predict changes in cell morphology induced by chemical or gene perturbations in silico. 
+                The approach addresses the fundamental challenge of distinguishing true biological effects from experimental artifacts 
+                through innovative distribution-to-distribution modeling.
+            </p>
+
+            <d-figure id="fig-overview">
+                <figure>
+                    <img data-zoomable="" draggable="false" src="assets/1.png" alt="CellFlux Overview">
+                    <figcaption>
+                        <strong>Figure 1:</strong> Method overview.
+                        <strong>(a)</strong> Objective: Predict morphological changes from perturbations.
+                        <strong>(b)</strong> Data: High-content screening with control and perturbed wells.
+                        <strong>(c)</strong> Problem formulation: Distribution-to-distribution transformation.
+                        <strong>(d)</strong> Flow matching: Learning velocity fields for continuous transformation.
+                        <strong>(e)</strong> Results: Superior performance in generation quality and biological accuracy.
+                    </figcaption>
+                </figure>
+            </d-figure>
+
+            <p class="text">
+                Key components of CellFlux include:
+            </p>
+            <ul class="text">
+              <li><strong>Objective.</strong> Predict changes in cell morphology induced by chemical or gene perturbations in silico. In this example, the perturbation effect reduces the nuclear size.</li>
+              <li><strong>Data.</strong> The dataset includes images from high-content screening experiments, where chemical or genetic perturbations are applied to target wells, alongside control wells without perturbations. Control wells provide prior information to contrast with target images, enabling the identification of true perturbation effects (e.g., reduced nucleus size) while calibrating non-perturbation artifacts such as batch effects—systematic biases unrelated to the perturbation (e.g., variations in color intensity).</li>
+              <li><strong>Problem formulation.</strong> We formulate the task as a distribution-to-distribution problem (many-to-many mapping), where the source distribution consists of control images, and the target distribution contains perturbed images within the same batch.</li>
+              <li><strong>Flow matching.</strong> Our method employs flow matching, a state-of-the-art generative approach for distribution-to-distribution problems. It learns a neural network to approximate a velocity field, continuously transforming the source distribution into the target by solving an ordinary differential equation (ODE).</li>
+              <li><strong>Results.</strong> The method significantly outperforms baselines in image generation quality, achieving lower Fréchet Inception Distance (FID) and higher classification accuracy for mode-of-action (MoA) predictions.</li>
         </div>
-      </div>
-    </div>
-    <br><br>
-    <!--/ Key Innovation -->
 
-    <!-- Methods -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-4">🛠️ CellFlux Methods</h2>
-        <div class="content has-text-justified">
-          <center><img id="method" src="assets/2.png" width="100%"/></center>
-          <p><strong>CellFlux Algorithm Overview.</strong> Our method leverages flow matching to learn continuous transformations between cellular states:</p>
-          
-          <h3 class="title is-5">Training Process</h3>
-          <p>During training, CellFlux learns a velocity field by fitting trajectories between control cell images (x₀ ~ p₀) and perturbed cell images (x₁ ~ p₁). At each training step, intermediate states are sampled along linear interpolations, and the network minimizes the difference between predicted and true velocities.</p>
-          
-          <h3 class="title is-5">Inference Process</h3>
-          <p>At inference, the trained velocity field guides the transformation of control cell states into perturbed states by solving an ordinary differential equation iteratively using numerical integration steps.</p>
-          
-          <h3 class="title is-5">Key Technical Components</h3>
-          <ul>
-            <li><strong>Conditional Flow Matching:</strong> Extends flow matching to handle perturbation conditions</li>
-            <li><strong>Classifier-Free Guidance:</strong> Improves generation fidelity through conditional/unconditional interpolation</li>
-            <li><strong>Noise Augmentation:</strong> Prevents overfitting and encourages smooth velocity fields</li>
-            <li><strong>U-Net Architecture:</strong> Captures multi-scale features for accurate cellular morphology modeling</li>
-          </ul>
-          
-          <div class="code-block">
-            <p>Try our CellFlux methods with: <code>bash example.sh</code></p>
-          </div>
+        <div id='innovation' class="connector-block">
+            <h1 class="text">💡 Key Innovation: Distribution-to-Distribution Transformation</h1>
+            
+            <p class="text">
+                Our key innovation lies in formulating cellular morphology prediction as a <strong>distribution-to-distribution learning problem</strong>. 
+                Traditional methods often ignore control cells or treat perturbation prediction as a simple image-to-image translation. 
+                In contrast, our approach recognizes that:
+            </p>
+
+            <div class="subsection">
+                <ul class="text">
+                    <li><strong>Control cells provide crucial context:</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects</li>
+                    <li><strong>Batch effects are systematic biases:</strong> Variations in experimental conditions across different runs introduce consistent biases unrelated to the perturbation itself</li>
+                    <li><strong>Distribution-wise modeling is more robust:</strong> By learning transformations between entire distributions rather than individual images, our method captures the inherent variability in biological systems</li>
+                </ul>
+                
+                <p class="text">
+                    This approach enables our method to generate more accurate and biologically meaningful cellular responses while maintaining robustness across diverse experimental conditions.
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
-    <br><br>
-    <!--/ Methods -->
 
-    <!-- Capabilities -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-4">💎 CellFlux Capabilities</h2>
-        
-        <div class="content has-text-justified">
-          <h3 class="title is-5">State-of-the-Art Performance</h3>
-          <p>CellFlux achieves superior performance across multiple cellular imaging datasets:</p>
-          <center><img id="results" src="assets/3.png" width="90%"/></center>
-          <center><img id="results" src="assets/4.png" width="90%"/></center>
-          <p>Our results demonstrate significant improvements in both image generation quality and biological relevance, with CellFlux achieving:</p>
-          <ul>
-            <li><strong>35% improvement in FID scores</strong> compared to existing methods</li>
-            <li><strong>12% increase in mode-of-action prediction accuracy</strong></li>
-            <li><strong>Superior handling of batch effects</strong> through distribution-wise modeling</li>
-            <li><strong>Strong out-of-distribution generalization</strong> to unseen perturbations</li>
-          </ul>
-        </div><br>
+        <div id='methods' class="data-block">
+            <h1 class="text">🛠️ Algorithm Details</h1>
+            
+            <p class="text">
+                Our method leverages flow matching to learn continuous transformations between cellular states. 
+                The algorithm is designed to handle the complexity of biological data while maintaining computational efficiency.
+            </p>
 
-        <h3 class="title is-5">Novel Capabilities: Continuous Interpolation</h3>
-        <div class="content has-text-justified">
-          <center><img id="interpolation" src="assets/5.png" width="90%"/></center>
-          <p>CellFlux unlocks unprecedented capabilities that advance the field toward a true virtual cell:</p>
-          <ul>
-            <li><strong>Smooth State Transitions:</strong> Enables visualization of cellular morphology changes over time</li>
-            <li><strong>Bidirectional Transformations:</strong> Can model both forward perturbation and recovery dynamics</li>
-            <li><strong>Batch Effect Calibration:</strong> Distinguishes true biological effects from experimental artifacts</li>
-            <li><strong>Trajectory Modeling:</strong> Provides insights into the dynamics of cellular responses</li>
-          </ul>
-          <p>These capabilities significantly advance our understanding of cellular behavior and provide powerful tools for drug discovery and personalized therapy development.</p>
-        </div><br>
-        
-      </div>
-    </div>
-  </div>
-</section>
+            <d-figure id="fig-methods">
+                <figure>
+                    <img data-zoomable="" draggable="false" src="assets/2.png" alt="CellFlux Algorithm Overview">
+                    <figcaption>
+                        <strong>Figure 2:</strong> Algorithm overview. Our method leverages flow matching to learn continuous transformations between cellular states.
+                    </figcaption>
+                </figure>
+            </d-figure>
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{CellFlux,
-  title={CellFlux: Simulating Cellular Morphology Changes via Flow Matching},
-  author={Zhang, Yuhui and Su, Yuchang and Wang, Chenyu and Li, Tianhong and Wefers, Zoe and Nirschl, Jeffrey and Burgess, James and Ding, Daisy and Lozano, Alejandro and Lundberg, Emma and Yeung-Levy, Serena},
-  booktitle={International Conference on Machine Learning (ICML)},
-  year={2025}
-}</code></pre>
-  </div>
-</section>
+            <div class="subsection">
+                <h3 class="text">Training Process</h3>
+                <p class="text">
+                    During training, our model learns a velocity field by fitting trajectories between control cell images (x₀ ~ p₀) and perturbed cell images (x₁ ~ p₁). 
+                    At each training step, intermediate states are sampled along linear interpolations, and the network minimizes the difference between predicted and true velocities.
+                </p>
+            </div>
 
-<footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a 
-            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-              Creative Commons Attribution-ShareAlike 4.0 International License
-            </a>. 
-            The website template is from the 
-            <a href="https://github.com/nerfies/nerfies.github.io">
-              Nerfies
-            </a> 
-            project page.
-          </p>
+            <div class="subsection">
+                <h3 class="text">Inference Process</h3>
+                <p class="text">
+                    At inference, the trained velocity field guides the transformation of control cell states into perturbed states by solving an ordinary differential equation iteratively using numerical integration steps.
+                </p>
+            </div>
+
+            <div class="subsection">
+              <p class="text">
+                Key Technical Components include:
+              </p>
+                <ul class="text">
+                    <li><strong>Conditional Flow Matching:</strong> Extends flow matching to handle perturbation conditions</li>
+                    <li><strong>Classifier-Free Guidance:</strong> Improves generation fidelity through conditional/unconditional interpolation</li>
+                    <li><strong>Noise Augmentation:</strong> Prevents overfitting and encourages smooth velocity fields</li>
+                    <li><strong>U-Net Architecture:</strong> Captures multi-scale features for accurate cellular morphology modeling</li>
+                </ul>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</footer>
 
-</body>
+        <div id='capabilities' class="sota-block">
+            <h1 class="text">💎 Results & Capabilities</h1>
+            
+            <div class="subsection">
+                <h3 class="text">State-of-the-Art Performance</h3>
+                <p class="text">
+                    Our method achieves superior performance across multiple cellular imaging datasets, demonstrating significant improvements in both image generation quality and biological relevance.
+                </p>
+
+                <d-figure id="fig-results1">
+                    <figure>
+                        <img data-zoomable="" draggable="false" src="assets/3.png" alt="CellFlux Performance Results">
+                        <figcaption>
+                            <strong>Figure 3:</strong> State-of-the-art performance across multiple datasets. Our method consistently outperforms baseline methods.
+                        </figcaption>
+                        </figure>
+                </d-figure>
+
+                <d-figure id="fig-results2">
+                    <figure>
+                        <img data-zoomable="" draggable="false" src="assets/4.png" alt="Detailed Performance Metrics">
+                        <figcaption>
+                            <strong>Figure 4:</strong> Detailed performance metrics showing our method's superiority in various biological tasks.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+
+                <p class="text">
+                    Our results demonstrate significant improvements:
+                </p>
+                <ul class="text">
+                    <li><strong>35%</strong> improvement in FID scores compared to existing methods</li>
+                    <li><strong>12%</strong> increase in mode-of-action prediction accuracy</li>
+                    <li><strong>Strong out-of-distribution generalization</strong> to unseen perturbations</li>
+                </ul>
+            </div>
+
+            <div class="subsection">
+                <h3 class="text">Novel Capabilities</h3>
+                <p class="text">
+                    Our method unlocks unprecedented capabilities that advance the field toward a true virtual cell, 
+                    enabling researchers to study cellular dynamics in ways previously impossible.
+                </p>
+
+                <d-figure id="fig-interpolation">
+                    <figure>
+                        <img data-zoomable="" draggable="false" src="assets/5.png" alt="Continuous Interpolation Capabilities">
+                        <figcaption>
+                            <strong>Figure 5:</strong> Novel capabilities including batch effects calibration and modeling bidirectional cellular morphological change trajectories.
+                        </figcaption>
+                    </figure>
+                </d-figure>
+
+                <p class="text">
+                    Key capabilities include:
+                </p>
+                <ul class="text">
+                  <li><strong>Trajectory Modeling:</strong> Provides insights into the dynamics of cellular responses</li>
+                    <li><strong>Bidirectional Transformations:</strong> Can model both forward perturbation and recovery dynamics</li>
+                    <li><strong>Batch Effect Calibration:</strong> Distinguishes true biological effects from experimental artifacts</li>
+                </ul>
+
+                <p class="text">
+                    These capabilities significantly advance our understanding of cellular behavior and provide powerful tools for drug discovery and personalized therapy development.
+                </p>
+            </div>
+        </div>
+
+        <div id="conclusion" style="position: relative; margin-top: 40px; margin-bottom: 0px;">
+            <h2 class="text" style="margin-top:0px; margin-bottom:10px">Conclusion</h2>
+            <p class="text">
+                Our method represents a significant advancement in computational biology, providing researchers with powerful tools for virtual cell modeling, drug discovery, and understanding cellular dynamics. The distribution-to-distribution approach addresses fundamental challenges in biological data analysis, while flow matching enables unprecedented capabilities in cellular morphology simulation. We hope our work will strengthen the computational biology community and accelerate progress toward truly predictive virtual cell models.
+            </p>
+        </div>
+
+        </d-article>
+        <d-appendix>
+            <h3>BibTeX</h3>
+            <p class="bibtex">
+                @inproceedings{CellFlux,<br>
+                &nbsp;&nbsp;title={{CellFlux: Simulating Cellular Morphology Changes via Flow Matching}},<br>
+                &nbsp;&nbsp;author={Zhang, Yuhui and Su, Yuchang and Wang, Chenyu and Li, Tianhong and Wefers, Zoe and Nirschl, Jeffrey and Burgess, James and Ding, Daisy and Lozano, Alejandro and Lundberg, Emma and Yeung-Levy, Serena},<br>
+                &nbsp;&nbsp;booktitle={International Conference on Machine Learning (ICML)},<br>
+                &nbsp;&nbsp;year={2025}<br>
+                }
+            </p>
+
+            <d-footnote-list></d-footnote-list>
+            <d-citation-list></d-citation-list>
+        </d-appendix>
+        <script src="./static/js/nav-bar.js"></script>
+    </body>
 </html>
