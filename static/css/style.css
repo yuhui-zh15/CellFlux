@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
 body {
-  font-family: Charter;
+  font-family: 'Merriweather', serif;
+  font-size: 0.95rem;
 }
 
 .header-wrapper {
@@ -99,7 +102,7 @@ body {
 }
 
 .header-content h1 {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin-bottom: 0.5em;
     line-height: 1.2;
     color: #FEAE6F;
@@ -122,16 +125,16 @@ body {
   }
 
   .header-content h1 {
-    font-size: 3em;
+    font-size: 2.5em;
     margin-bottom: 0.125em;
   }
   .header-content h2 {
-    font-size: 1.7em;
+    font-size: 1.5em;
     margin-top: 0;
   }
 
   .responsive-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
     line-height: 1.4;
@@ -139,7 +142,7 @@ body {
   }
 
   .header-container p {
-    font-size: 1.04rem;
+    font-size: 0.9rem;
   }
 
   .header-image {
@@ -666,13 +669,10 @@ aside th:first-child, aside td:first-child {
 }
 
 
-figcaption .table-caption {
-  text-align: center;
-  padding: 8px;
-  font-style: italic;
-  color: #6c757d;
-  margin-top: 0; /* Ensures there is no additional space between table and caption */
-  font-size: 12px;
+figcaption {
+    font-size: 0.95em;
+    margin-top: 0.25em;
+    text-align: center;
 }
 
 
@@ -1043,18 +1043,18 @@ d-article > div > h3 {
   /* width: 150%; */
   width: 150%;
   margin: 1em 0 1em -20%;
-  font-size: 1.2rem;
+  font-size: 1.0rem;
 }
 
 h1.text {
-    font-size: 2em;
+    font-size: 1.6em;
 }
 h2.text {
-    font-size: 1.8em;
+    font-size: 1.4em;
 }
 
 .abstract {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
 }
 
 .auto-video {
@@ -1125,7 +1125,7 @@ figure {
 }
 
 figcaption {
-    font-size: 1.125em;
+    font-size: 0.95em;
     margin-top: 0.25em;
     text-align: center;
 }
@@ -1457,7 +1457,7 @@ iframe {
 }
 
 .responsive-subtitle {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
     line-height: 1.3;

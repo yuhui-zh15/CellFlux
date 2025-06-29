@@ -35,6 +35,9 @@
         <link rel="stylesheet" href="./static/css/style.css">
         <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
@@ -71,7 +74,7 @@
                         <div class="icon-container" style="justify-content: flex-start; text-align: left; margin: 2rem 0;">
                             <div class="icon-item" style="text-align: left;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">🔮 </div>
-                                <div style="font-size: 1.05rem;"><strong>Method Overview</strong>: Predict changes in cell morphology induced by chemical or gene perturbations through distribution-to-distribution modeling using flow matching.</div>
+                                <div style="font-size: 1.05rem;"><strong>Method Overview</strong>: Predict cell morphology changes induced by chemical or genetic perturbations using distribution-to-distribution modeling via flow matching.</div>
                             </div>
                             <div class="icon-item" style="text-align: left;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">💡 </div>
@@ -79,26 +82,20 @@
                             </div>
                             <div class="icon-item" style="text-align: left;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">🛠️ </div>
-                                <div style="font-size: 1.05rem;"><strong>Algorithm Details</strong>: Employ flow matching to learn continuous transformations with conditional flow matching, classifier-free guidance, and U-Net architecture.</div>
+                                <div style="font-size: 1.05rem;"><strong>Algorithm Details</strong>: Employ flow matching to learn continuous transformations between distributions with conditional flow matching, classifier-free guidance, and U-Net architecture.</div>
                             </div>
                             <div class="icon-item" style="text-align: left;">
                                 <div style="font-size: 2rem; margin-bottom: 0.5rem; margin-right: 0.5rem;">💎 </div>
-                                <div style="font-size: 1.05rem;"><strong>Results & Capabilities</strong>: Achieve 35% improvement in FID scores and 12% increase in prediction accuracy with novel trajectory modeling capabilities.</div>
+                                <div style="font-size: 1.05rem;"><strong>Results & Capabilities</strong>: Achieve 35% improvement in FID scores and 12% increase in prediction accuracy with batch effect correction and trajectory modeling capabilities.</div>
                             </div>
                         </div>
 
                     <div class="button-container" style="justify-content: flex-start; margin: 2rem 0;">
-                        <a href="https://arxiv.org/abs/2502.09775" class="button paper-link" target="_blank">
-                            <span class="icon is-small">
-                                <i class="ai ai-arxiv"></i>
-                            </span>
-                            arXiv
-                        </a>
                         <a href="https://arxiv.org/pdf/2502.09775" class="button paper-link" target="_blank">
                             <span class="icon is-small">
                                 <i class="fas fa-file-pdf"></i>
                             </span>
-                            <span>pdf</span>
+                            <span>Paper</span>
                         </a>
                         <a href="https://github.com/yuhui-zh15/CellFlux" class="button" target="_blank">
                             <span class="icon is-small">
@@ -120,7 +117,7 @@
                     <a href="https://cs.stanford.edu/~yuhuiz/" class="author-link" target="_blank">Yuhui Zhang<sup>1,*</sup></a> &emsp;
                     <a href="https://suyccc.github.io/" class="author-link" target="_blank">Yuchang Su<sup>2,*</sup></a> &emsp;
                     <a href="https://chenyuwang-monica.github.io/" class="author-link" target="_blank">Chenyu Wang<sup>3</sup></a> &emsp;
-                    <a href="https://www.tianhongli.me/" class="author-link" target="_blank">Tianhong Li<sup>1</sup></a> &emsp;
+                    <a href="https://www.tianhongli.me/" class="author-link" target="_blank">Tianhong Li<sup>3</sup></a> &emsp;
                     <a href="https://scholar.google.com/citations?user=0XwkyyEAAAAJ&hl=en" class="author-link" target="_blank">Zoe Wefers<sup>1</sup></a> &emsp;
                     <a href="https://scholar.google.com/citations?user=AJJwTxoAAAAJ&hl=en" class="author-link" target="_blank">Jeffrey Nirschl<sup>1</sup></a> &emsp;
                     <a href="https://jmhb0.github.io/" class="author-link" target="_blank">James Burgess<sup>1</sup></a> &emsp;
@@ -135,6 +132,7 @@
                     <a href="https://www.tsinghua.edu.cn/" class="affiliation-link" target="_blank"><sup>2</sup>Tsinghua University</a> &emsp;
                     <a href="https://mit.edu/" class="affiliation-link" target="_blank"><sup>3</sup>MIT</a>
                 </div>
+                <br>
                 <p style="text-align: center; font-size: 1.35em; color: red; font-weight: bold;">
                     <a href="#" target="_blank">ICML 2025</a>
                 </p>
@@ -150,7 +148,7 @@
             Unlike prior methods, CellFlux models distribution-wise transformations from unperturbed to perturbed cell states, effectively distinguishing actual perturbation effects from experimental artifacts such as batch effects—a major challenge in biological data.
 
             <br><br>
-            When evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a <strong>35% improvement in FID scores</strong> and a <strong>12% increase in mode-of-action prediction accuracy</strong> over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, providing a potential tool for studying perturbation dynamics. These capabilities mark a significant step toward realizing virtual cell modeling for biomedical research.
+            When evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a <strong>35% improvement in FID scores</strong> and a <strong>12% increase in mode-of-action prediction accuracy</strong> over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, offering a promising tool for studying perturbation dynamics. These capabilities represent a substantial step toward advancing virtual cell modeling in biomedical research.
         </p>
 
         <div class="icon-row">
@@ -178,7 +176,7 @@
         </p>
 
         <p class="text abstract">
-            Our method represents a significant advancement in computational biology, providing researchers with powerful tools for <strong>virtual cell modeling</strong>, <strong>drug discovery</strong>, and <strong>understanding cellular dynamics</strong>. The open-source implementation enables the community to build upon this work and accelerate progress in this field.
+            Our method makes a meaningful contribution to computational biology, providing researchers with new tools for <strong>virtual cell modeling</strong> and the study of <strong>in-silico drug screening</strong> and <strong>personalized therapy development</strong>. The open-source implementation enables the community to build upon this work and accelerate progress in this field.
         </p>
 
         <hr>
@@ -222,29 +220,28 @@
             
             <p class="text">
                 Our key innovation lies in formulating cellular morphology prediction as a <strong>distribution-to-distribution learning problem</strong>. 
-                Traditional methods often ignore control cells or treat perturbation prediction as a simple image-to-image translation. 
+                Traditional methods often ignore control cells and treat perturbation prediction as a noise-to-image generation problem. 
                 In contrast, our approach recognizes that:
             </p>
 
             <div class="subsection">
                 <ul class="text">
-                    <li><strong>Control cells provide crucial context.</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects.</li>
                     <li><strong>Batch effects are systematic biases.</strong> Variations in experimental conditions across different runs introduce consistent biases unrelated to the perturbation itself.</li>
-                    <li><strong>Distribution-wise modeling is more robust.</strong> By learning transformations between entire distributions rather than individual images, our method captures the inherent variability in biological systems.</li>
+                    <li><strong>Control cells provide crucial context.</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects.</li>
+                    <li><strong>Distribution-wise modeling is more robust.</strong> Learning transformations between control and perturbed distributions captures true perturbation effects while filtering out batch effects.</li>
                 </ul>
                 
                 <p class="text">
-                    This approach enables our method to generate more accurate and biologically meaningful cellular responses while maintaining robustness across diverse experimental conditions.
+                    This formulation enables our method to generate more accurate cellular responses while maintaining robustness across diverse experimental conditions.
                 </p>
             </div>
         </div>
-
+        
         <div id='methods' class="data-block">
             <h1 class="text">🛠️ Algorithm Details</h1>
             
             <p class="text">
-                Our method leverages flow matching to learn continuous transformations between cellular states. 
-                The algorithm is designed to handle the complexity of biological data while maintaining computational efficiency.
+                Our method leverages flow matching—a principled generative modeling approach designed for distribution-to-distribution tasks—to learn continuous transformations between cellular states.
             </p>
 
             <d-figure id="fig-methods">
@@ -290,7 +287,7 @@
             <div class="subsection">
                 <h3 class="text">State-of-the-Art Performance</h3>
                 <p class="text">
-                    Our method achieves superior performance across multiple cellular imaging datasets, demonstrating significant improvements in both image generation quality and biological relevance.
+                    Our method achieves strong performance across multiple cellular imaging datasets, demonstrating significant improvements in both image generation quality and biological fidelity.
                 </p>
 
                 <d-figure id="fig-results1">
@@ -306,7 +303,7 @@
                     <figure>
                         <img data-zoomable="" draggable="false" src="assets/4.png" alt="Detailed Performance Metrics">
                         <figcaption>
-                            <strong>Figure 4:</strong> Qualitative results showing our method generates the most biologically accurate and faithful images in various settings.
+                            <strong>Figure 4:</strong> Qualitative results showing our method generates the most biologically accurate and faithful images under various perturbation conditions.
                         </figcaption>
                     </figure>
                 </d-figure>
@@ -315,24 +312,23 @@
                     Our results demonstrate significant improvements:
                 </p>
                 <ul class="text">
-                    <li><strong>35%</strong> improvement in FID scores compared to existing methods</li>
-                    <li><strong>12%</strong> increase in mode-of-action prediction accuracy</li>
-                    <li><strong>Strong out-of-distribution generalization</strong> to unseen perturbations</li>
+                    <li><strong>35%</strong> improvement in FID scores compared to existing methods.</li>
+                    <li><strong>12%</strong> increase in mode-of-action prediction accuracy.</li>
+                    <li><strong>Strong out-of-distribution generalization</strong> to unseen perturbations.</li>
                 </ul>
             </div>
 
             <div class="subsection">
                 <h3 class="text">Novel Capabilities</h3>
                 <p class="text">
-                    Our method unlocks unprecedented capabilities that advance the field toward a true virtual cell, 
-                    enabling researchers to study cellular dynamics in ways previously impossible.
+                    Our method enables new capabilities of batch effect correction and trajectory modeling, advancing the field of virtual cell modeling.
                 </p>
 
                 <d-figure id="fig-interpolation">
                     <figure>
                         <img data-zoomable="" draggable="false" src="assets/5.png" alt="Continuous Interpolation Capabilities">
                         <figcaption>
-                            <strong>Figure 5:</strong> Novel capabilities including batch effects calibration and modeling bidirectional cellular morphological change trajectories.
+                            <strong>Figure 5:</strong> Novel capabilities include batch effect correction and modeling bidirectional cellular morphological change trajectories.
                         </figcaption>
                     </figure>
                 </d-figure>
@@ -341,9 +337,8 @@
                     Key capabilities include:
                 </p>
                 <ul class="text">
-                    <li><strong>Batch Effect Calibration:</strong> Distinguishes true biological effects from experimental artifacts.</li>
-                    <li><strong>Trajectory Modeling:</strong> Provides insights into the dynamics of cellular responses.</li>
-                    <li><strong>Bidirectional Transformations:</strong> Can model both forward perturbation and recovery dynamics.</li>
+                    <li><strong>Batch Effect Correction:</strong> By conditioning on control cells, our method distinguishes true biological effects from experimental artifacts.</li>
+                    <li><strong>Trajectory Modeling:</strong> The continuous velocity field learned via flow matching captures cellular morphological change trajectories, offering insights into the dynamics of cellular responses.</li>
                 </ul>
 
                 <p class="text">
@@ -355,7 +350,7 @@
         <div id="conclusion" style="position: relative; margin-top: 40px; margin-bottom: 0px;">
             <h2 class="text" style="margin-top:0px; margin-bottom:10px">Conclusion</h2>
             <p class="text">
-                Our method represents a significant advancement in computational biology, providing researchers with powerful tools for virtual cell modeling, drug discovery, and understanding cellular dynamics. The distribution-to-distribution approach addresses fundamental challenges in biological data analysis, while flow matching enables unprecedented capabilities in cellular morphology simulation. We hope our work will strengthen the computational biology community and accelerate progress toward truly predictive virtual cell models.
+                We introduce CellFlux, a method that leverages flow matching to generate cell images under various perturbations while capturing their trajectories, paving the way for the development of a virtual cell framework for biomedical research. In future work, we plan to scale up CellFlux to process terabytes of imaging data encompassing diverse cell types and a wide range of perturbations, enabling the full potential of virtual cell modeling.
             </p>
         </div>
 
@@ -373,7 +368,7 @@
 
             <h3>Acknowledgments</h3>
             <p style="color: gray; font-size: 0.9em;">
-                We thank Cambrian for generously providing this elegant project page template, which is available at <a href="https://github.com/cambrian-mllm/cambrian-mllm.github.io" target="_blank" style="color: gray;">here</a>.
+                We thank Cambrian for providing this elegant project page template, which is available at <a href="https://github.com/cambrian-mllm/cambrian-mllm.github.io" target="_blank" style="color: gray;">here</a>.
             </p>
 
             <d-footnote-list></d-footnote-list>
