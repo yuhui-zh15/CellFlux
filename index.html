@@ -58,10 +58,10 @@
     </head>
     <body>
         <div class="header-wrapper">
-            <div class="header-container" id="header-container" style="flex-direction: column; align-items: center;">
-                <div class="header-content" style="max-width: 100%; text-align: left; margin-bottom: 2rem;">
-                    <h1 style="margin-top: 0px; font-size: 2.5rem;"><i>CellFlux</i></h1>
-                    <h2 style="font-size: 1.8rem;">Simulating Cellular Morphology Changes via <i>Flow Matching</i></h2>
+            <div class="header-container" id="header-container">
+                <div class="header-content">
+                    <h1 style="margin-top: 0px; font-size: 2.5rem;"><i>CellFlux:</i></h1>
+                    <h2 class="responsive-subtitle">Simulating Cellular Morphology Changes via <i>Flow Matching</i></h2>
                         <p style="font-size: 1.2rem; line-height: 1.6; margin: 1.5rem 0;">
                             Building a virtual cell capable of accurately simulating cellular behaviors in silico has long been a dream in computational biology. 
                             We introduce <em><strong>CellFlux</strong></em>, an image-generative model that simulates cellular morphology changes 
@@ -108,7 +108,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="header-image" style="width: 100%; max-width: 1200px; margin-top: 1rem;">
+                <div class="header-image">
                     <img draggable="false" src="assets/0.png" alt="CellFlux Overview" class="teaser-image" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
                 </div>
             </div>
@@ -126,8 +126,8 @@
                     <a href="https://jmhb0.github.io/" class="author-link" target="_blank">James Burgess<sup>1</sup></a> &emsp;
                     <a href="https://scholar.google.com/citations?user=O2HUmYsAAAAJ&hl=en" class="author-link" target="_blank">Daisy Ding<sup>1</sup></a> &emsp;
                     <a href="https://ale9806.github.io/alejandrolozano/" class="author-link" target="_blank">Alejandro Lozano<sup>1</sup></a> &emsp;
-                    <a href="https://lundberglab.stanford.edu/" class="author-link" target="_blank">Emma Lundberg<sup>1,†</sup></a> &emsp;
-                    <a href="https://ai.stanford.edu/~syyeung/" class="author-link" target="_blank">Serena Yeung-Levy<sup>1,†</sup></a>
+                    <a href="https://lundberglab.stanford.edu/" class="author-link" target="_blank">Emma Lundberg<sup>1</sup></a> &emsp;
+                    <a href="https://ai.stanford.edu/~syyeung/" class="author-link" target="_blank">Serena Yeung-Levy<sup>1</sup></a>
                     <p></p>
                 </p>
                 <div style="text-align: center;">
@@ -139,8 +139,7 @@
                     <a href="#" target="_blank">ICML 2025</a>
                 </p>
                 <p style="text-align: center; margin-bottom: 0;">
-                    <span class="author-note"><sup>*</sup>Equal contribution</span>&emsp;
-                    <span class="author-note"><sup>†</sup>Corresponding author</span>
+                    <span class="author-note"><sup>*</sup>Equal contribution</span>
                 </p>
             </div>
         </div>
@@ -151,7 +150,7 @@
             Unlike prior methods, CellFlux models distribution-wise transformations from unperturbed to perturbed cell states, effectively distinguishing actual perturbation effects from experimental artifacts such as batch effects—a major challenge in biological data.
 
             <br><br>
-            Evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a <strong>35% improvement in FID scores</strong> and a <strong>12% increase in mode-of-action prediction accuracy</strong> over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, providing a potential tool for studying perturbation dynamics. These capabilities mark a significant step toward realizing virtual cell modeling for biomedical research.
+            When evaluated on chemical (BBBC021), genetic (RxRx1), and combined perturbation (JUMP) datasets, CellFlux generates biologically meaningful cell images that faithfully capture perturbation-specific morphological changes, achieving a <strong>35% improvement in FID scores</strong> and a <strong>12% increase in mode-of-action prediction accuracy</strong> over existing methods. Additionally, CellFlux enables continuous interpolation between cellular states, providing a potential tool for studying perturbation dynamics. These capabilities mark a significant step toward realizing virtual cell modeling for biomedical research.
         </p>
 
         <div class="icon-row">
@@ -212,7 +211,7 @@
             </p>
             <ul class="text">
               <li><strong>Objective.</strong> Predict changes in cell morphology induced by chemical or gene perturbations in silico. In this example, the perturbation effect reduces the nuclear size.</li>
-              <li><strong>Data.</strong> The dataset includes images from high-content screening experiments, where chemical or genetic perturbations are applied to target wells, alongside control wells without perturbations. Control wells provide prior information to contrast with target images, enabling the identification of true perturbation effects (e.g., reduced nucleus size) while calibrating non-perturbation artifacts such as batch effects—systematic biases unrelated to the perturbation (e.g., variations in color intensity).</li>
+              <li><strong>Data.</strong> The dataset includes images from high-content screening experiments, where chemical or genetic perturbations are applied to target wells, alongside control wells without perturbations. Control wells provide prior information that contrasts with target images, enabling the identification of true perturbation effects (e.g., reduced nucleus size) while calibrating non-perturbation artifacts such as batch effects—systematic biases unrelated to the perturbation (e.g., variations in color intensity).</li>
               <li><strong>Problem formulation.</strong> We formulate the task as a distribution-to-distribution problem (many-to-many mapping), where the source distribution consists of control images, and the target distribution contains perturbed images within the same batch.</li>
               <li><strong>Flow matching.</strong> Our method employs flow matching, a state-of-the-art generative approach for distribution-to-distribution problems. It learns a neural network to approximate a velocity field, continuously transforming the source distribution into the target by solving an ordinary differential equation (ODE).</li>
               <li><strong>Results.</strong> The method significantly outperforms baselines in image generation quality, achieving lower Fréchet Inception Distance (FID) and higher classification accuracy for mode-of-action (MoA) predictions.</li>
@@ -229,9 +228,9 @@
 
             <div class="subsection">
                 <ul class="text">
-                    <li><strong>Control cells provide crucial context:</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects</li>
-                    <li><strong>Batch effects are systematic biases:</strong> Variations in experimental conditions across different runs introduce consistent biases unrelated to the perturbation itself</li>
-                    <li><strong>Distribution-wise modeling is more robust:</strong> By learning transformations between entire distributions rather than individual images, our method captures the inherent variability in biological systems</li>
+                    <li><strong>Control cells provide crucial context.</strong> They serve as a reference to distinguish true perturbation effects from experimental artifacts like batch effects.</li>
+                    <li><strong>Batch effects are systematic biases.</strong> Variations in experimental conditions across different runs introduce consistent biases unrelated to the perturbation itself.</li>
+                    <li><strong>Distribution-wise modeling is more robust.</strong> By learning transformations between entire distributions rather than individual images, our method captures the inherent variability in biological systems.</li>
                 </ul>
                 
                 <p class="text">
@@ -277,10 +276,10 @@
                 Key Technical Components include:
               </p>
                 <ul class="text">
-                    <li><strong>Conditional Flow Matching:</strong> Extends flow matching to handle perturbation conditions</li>
-                    <li><strong>Classifier-Free Guidance:</strong> Improves generation fidelity through conditional/unconditional interpolation</li>
-                    <li><strong>Noise Augmentation:</strong> Prevents overfitting and encourages smooth velocity fields</li>
-                    <li><strong>U-Net Architecture:</strong> Captures multi-scale features for accurate cellular morphology modeling</li>
+                    <li><strong>Conditional Flow Matching:</strong> Extends flow matching to handle perturbation conditions.</li>
+                    <li><strong>Classifier-Free Guidance:</strong> Improves generation fidelity through conditional/unconditional interpolation.</li>
+                    <li><strong>Noise Augmentation:</strong> Prevents overfitting and encourages smooth velocity fields.</li>
+                    <li><strong>U-Net Architecture:</strong> Captures multi-scale features for accurate cellular morphology modeling.</li>
                 </ul>
             </div>
         </div>
@@ -307,7 +306,7 @@
                     <figure>
                         <img data-zoomable="" draggable="false" src="assets/4.png" alt="Detailed Performance Metrics">
                         <figcaption>
-                            <strong>Figure 4:</strong> Detailed performance metrics showing our method's superiority in various biological tasks.
+                            <strong>Figure 4:</strong> Qualitative results showing our method generates the most biologically accurate and faithful images in various settings.
                         </figcaption>
                     </figure>
                 </d-figure>
@@ -342,13 +341,13 @@
                     Key capabilities include:
                 </p>
                 <ul class="text">
-                  <li><strong>Trajectory Modeling:</strong> Provides insights into the dynamics of cellular responses</li>
-                    <li><strong>Bidirectional Transformations:</strong> Can model both forward perturbation and recovery dynamics</li>
-                    <li><strong>Batch Effect Calibration:</strong> Distinguishes true biological effects from experimental artifacts</li>
+                    <li><strong>Batch Effect Calibration:</strong> Distinguishes true biological effects from experimental artifacts.</li>
+                    <li><strong>Trajectory Modeling:</strong> Provides insights into the dynamics of cellular responses.</li>
+                    <li><strong>Bidirectional Transformations:</strong> Can model both forward perturbation and recovery dynamics.</li>
                 </ul>
 
                 <p class="text">
-                    These capabilities significantly advance our understanding of cellular behavior and provide powerful tools for drug discovery and personalized therapy development.
+                    These capabilities advance our understanding of cellular behavior and provide powerful tools for drug discovery and personalized therapy development.
                 </p>
             </div>
         </div>
@@ -370,6 +369,11 @@
                 &nbsp;&nbsp;booktitle={International Conference on Machine Learning (ICML)},<br>
                 &nbsp;&nbsp;year={2025}<br>
                 }
+            </p>
+
+            <h3>Acknowledgments</h3>
+            <p style="color: gray; font-size: 0.9em;">
+                We thank Cambrian for generously providing this elegant project page template, which is available at <a href="https://github.com/cambrian-mllm/cambrian-mllm.github.io" target="_blank" style="color: gray;">here</a>.
             </p>
 
             <d-footnote-list></d-footnote-list>
