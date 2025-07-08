@@ -55,7 +55,7 @@ Three datasets (BBBC021, RxRx1, and JUMP/CPG0000) used in this project are same 
 
 Additionally, for RxRx1 and CPG0000, evaluation is performed on 100 random selected perturbations. The data index CSV files for evaluation can be downloaded from [Huggingface](https://huggingface.co/suyc21/CellFlux). 
 
-In our implementation, we combined all the perturbation embeddings in CPG0000. The `combined_embeddings.csv` also needs to be downloaded from [Huggingface](https://huggingface.co/suyc21/CellFlux). 
+In our implementation, we combined all the perturbation embeddings in CPG0000. The `combined_embeddings.csv` also needs to be downloaded [here](https://huggingface.co/suyc21/CellFlux). 
 
 
 ### Running CellFlux
@@ -73,7 +73,7 @@ data_index_path: /path/to/your/datasets/[dataset_name]/metadata/[metadata_file].
 embedding_path: /path/to/your/datasets/embeddings/[embedding_file].csv
 ```
 
-#### 2. Training and Evaluation
+#### 2. Training
 
 **Quick Start with Example Script:**
 ```bash
