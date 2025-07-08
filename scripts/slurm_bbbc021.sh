@@ -13,8 +13,8 @@ python submitit_train.py \
     --edm_schedule \
     --skewed_timesteps \
     --fid_samples=5120 \
-    --job_dir=/share/pi/syyeung/yuhuiz/Cell/CellFlow/outputs/20250221_1247_bbbc_noise1.0_drop0.2_cfg0.2_prob_0.5/ \
-    --shared_dir=/share/pi/syyeung/yuhuiz/Cell/CellFlow/shared/ \
+    --job_dir=/path/to/your/outputs/ \
+    --shared_dir=/path/to/your/shared/ \
     --use_initial=2 \
     --noise_level=1.0 \
     --noise_prob=0.5 \

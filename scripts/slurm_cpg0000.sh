@@ -14,8 +14,8 @@ python submitit_train.py \
     --edm_schedule \
     --skewed_timesteps \
     --fid_samples=10240 \
-    --job_dir=/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250125_1754_cpg0000_noise1.0_drop0.2_cfg0.2_prob0.5/ \
-    --shared_dir=/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/shared/ \
+    --job_dir=/path/to/your/outputs/ \
+    --shared_dir=/path/to/your/shared/ \
     --use_initial=2 \
     --noise_level=1.0 \
     --noise_prob=0.5 \

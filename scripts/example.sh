@@ -18,4 +18,4 @@ python train.py \
     --fid_samples=5120 \
     --use_initial=2 \
     --noise_level=0.5 \
-    # --test_run
+    --output_dir=outputs/example \

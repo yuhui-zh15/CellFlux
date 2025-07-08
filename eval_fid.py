@@ -11,49 +11,7 @@ from torchmetrics.image.fid import FrechetInceptionDistance
 from torchmetrics.image.kid import KernelInceptionDistance
 from tqdm import tqdm
 from sklearn.metrics import pairwise_distances
-
-model_name = 'impa'
-dataset = 'bbbc021'
-yaml_path = f"config/eval_{dataset}.yaml"
-
-if model_name == 'phendiff':
-    #### PhenDiff ######
-    if 'rxrx1' in yaml_path:
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/PhenDiff/experiments/project_name/run_name/2025-01-23/01-24-35/linear_interp_custom_guidance_inverted_start/DDIM/test'
-    else:
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/PhenDiff/experiments/project_name/run_name/2025-01-20/07-53-30/linear_interp_custom_guidance_inverted_start/DDIM/test'
-elif model_name == 'impa':
-    ##### IMPA ######
-    if dataset == 'bbbc021':
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/IMPA_reproduce/outputs/bbbc021_all_iter_ctrl/epoch-200/fid_samples'
-    else:
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/IMPA/outputs/fid_samples'
-elif model_name == 'cellflow':
-    # ##### CellFlow ######
-    if 'rxrx1' in yaml_path:
-        # Use old rxrx1 model without noise prob
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_rxrx1_100_class_cfg0.0/fid_samples/epoch-20'
-        # synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_rxrx1_noise1.0/fid_samples'
-    elif 'cpg0000' in yaml_path:
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_cpg0000_100_class_cfg0.2/fid_samples/epoch-80'
-    elif dataset == 'bbbc_ood':
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_bbbc_ood/fid_samples/epoch-100'
-    else:
-        # different batch
-        synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_bbbc_different_batch/fid_samples/epoch-100'
-        # # no condition
-        # synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_bbbc_no_condition/fid_samples/epoch-100'
-        # # no cfg
-        # synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_bbbc_no_cfg/fid_samples/epoch-100'
-        # # normal
-        # synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250125_1141_bbbc_noise1.0_drop0.2_cfg0.2_prob_0.5/fid_samples/epoch-99'
-        # # no noise in control image
-        # synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/output_dir_eval_bbbc_noise1.0_drop0.2_cfg0.2_prob0.5/fid_samples/epoch-100'
-elif model_name == 'cellflow_from_noise': 
-    ##### CellFlow From Noise ######
-    synthetic_samples_path = '/share/pi/syyeung/yuhuiz/Cell/flow_matching/examples/image/output_dir_save_generated_image_from_noise/fid_samples'
-else:
-    synthetic_samples_path = None
+import argparse
 
 def read_img_from_path(img_path):
     img = Image.open(img_path)
@@ -63,21 +21,40 @@ def read_img_from_path(img_path):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model_name', type=str, required=True, help='Name of the model')
+    parser.add_argument('--dataset', type=str, required=True, help='Name of the dataset')
+    parser.add_argument('--output_name', type=str, default=None, help='Output name for results')
+    parser.add_argument('--num_to_cal', type=int, default=20480, help='Number of samples to calculate FID and KID')
+    parser.add_argument('--image_root', type=str, default=None, help='Image root to use')
+    
+    cli_args = parser.parse_args()
+    if cli_args.image_root:
+        synthetic_samples_path = cli_args.image_root
+    else:
+        raise ValueError("Image root is required")
+    
+    model_name = cli_args.model_name
+    dataset = cli_args.dataset
+    num_to_cal = cli_args.num_to_cal
+    yaml_path = f"configs/{dataset}.yaml"
     
     with open(yaml_path, 'r') as file:
         cfg = yaml.safe_load(file)
     args = SimpleNamespace(**cfg)
+    args.batch_size = 32
+    args.iter_ctrl = False
+    args.pin_mem = True
+    args.num_workers = 10
     datamodule = CellDataLoader_Eval(args)
     data_loader_train = datamodule.train_dataloader()
     data_loader_test = datamodule.test_dataloader()
     id2mol = datamodule.id2mol
-
     fid_metric = FrechetInceptionDistance(normalize=True).to('cuda', non_blocking=True)
     kid_metric = KernelInceptionDistance(subset_size=100, normalize=True).to('cuda', non_blocking=True)
 
     generated_samples = {i: [] for i in datamodule.id2mol.values()}
     target_samples = {i: [] for i in datamodule.id2mol.values()}
-    num_to_cal = 5120 if 'bbbc021' in yaml_path else 30720
     all_real_features = []
     all_fake_features = []
     permute = [0, 1, 2]
@@ -100,26 +77,21 @@ if __name__ == '__main__':
         synthetic_samples = []
         for i in range(real_samples.shape[0]):
             target_class = target_classes[i]
-            synthetic_sample = read_img_from_path(os.path.join(synthetic_samples_path, target_class + f'/{img_file_trt[i]}.png'))
-            # synthetic_sample = read_img_from_path(os.path.join(synthetic_samples_path, target_class + f'/{int(idx_trt[i])}.png'))
+            try:
+                synthetic_sample = read_img_from_path(os.path.join(synthetic_samples_path, target_class + f'/{img_file_trt[i]}.png'))
+            except:
+                synthetic_sample = read_img_from_path(os.path.join(synthetic_samples_path, target_class + f'/{int(idx_trt[i])}.png'))
             synthetic_samples.append(synthetic_sample)
         synthetic_samples = torch.stack(synthetic_samples).to('cuda')
         synthetic_samples = synthetic_samples.to(torch.float32) / 255.0
         synthetic_samples = synthetic_samples[:, permute, :, :]
         real_samples = real_samples[:, permute, :, :]
-        # if args.dataset_name == 'rxrx1':
-        #     x_real_ctrl = convert_6ch_to_3ch(x_real_ctrl)
-        # elif args.dataset_name == 'cpg0000':
-        #     x_real_ctrl = convert_5ch_to_3ch(x_real_ctrl)
-        
-        # synthetic_samples = torch.clamp(x_real_ctrl * 0.5 + 0.5, min=0.0, max=1.0)
-        # synthetic_samples = torch.floor(synthetic_samples * 255).to(torch.float32) / 255.0
-        # synthetic_samples = synthetic_samples.to('cuda')
+
         for i in range(real_samples.shape[0]):
             generated_samples[target_classes[i]].append(synthetic_samples[i])
             target_samples[target_classes[i]].append(real_samples[i])
 
-        # Update FID and KID metrics
+
         fid_metric.update(real_samples, real=True)
         fid_metric.update(synthetic_samples, real=False)
 
@@ -139,12 +111,9 @@ if __name__ == '__main__':
     fid = fid_metric.compute()
     kid_mean, kid_std = kid_metric.compute()
 
-    # import pdb; pdb.set_trace()
     fid_per_class = {}
     kid_per_class = {}
     if args.dataset_name == 'rxrx1':
-        # random sample 50 class from generated samples.keys
-        # np.random.seed(0)
         random_classes = np.random.choice(list(generated_samples.keys()), 50, replace=False)
     for key in generated_samples.keys():
         torch.cuda.empty_cache()
@@ -157,16 +126,22 @@ if __name__ == '__main__':
         fid_metric.reset()
         fid_metric.update(torch.tensor(target_samples[key]).to('cuda'), real=True)
         fid_metric.update(torch.tensor(generated_samples[key]).to('cuda'), real=False)
-        fid_per_class[key] = fid_metric.compute().cpu().numpy()
+        try:
+            fid_per_class[key] = fid_metric.compute().cpu().numpy()
+        except:
+            continue
 
         dynamic_subset_size = min(len(generated_samples[key]), 100)
 
-        # 按类初始化 KID（动态子采样大小）
         kid_metric_per_class = KernelInceptionDistance(subset_size=dynamic_subset_size, normalize=True).to('cuda', non_blocking=True)
     
         kid_metric.update(torch.tensor(target_samples[key]).to('cuda'), real=True)
         kid_metric.update(torch.tensor(generated_samples[key]).to('cuda'), real=False)
-        kid_mean_class, kid_std_class = kid_metric.compute()
+        try:
+            kid_mean_class, kid_std_class = kid_metric.compute()
+        except:
+            continue
+        
         kid_per_class[key] = {"mean": float(kid_mean_class.cpu().numpy()), "std": float(kid_std_class.cpu().numpy())}
 
         print(f'{key} ({len(generated_samples[key])}): FID={fid_per_class[key]}')
@@ -192,6 +167,7 @@ if __name__ == '__main__':
         "average_kid": {"mean": avg_kid_mean, "std": avg_kid_std},
         "fid_per_class": fid_per_class,
     }
-
-    with open(f"eval_results/{model_name}_{dataset}_different_batch.json", "w") as f:
+    output_dir = f"{model_name}_{dataset}_{num_to_cal}" if cli_args.output_name is None else cli_args.output_name
+    
+    with open(f"outputs/evaluation/{output_dir}.json", "w") as f:
         json.dump(results, f, indent=4)

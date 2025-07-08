@@ -16,14 +16,14 @@ modality_list:
   - Compound
 
 # DIRECTORIES FOR DATA
-image_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/rxrx1/
-data_index_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/IMPA_reproducibility/datasets/rxrx1/metadata/rxrx1_df_subset.csv
-embedding_path: /share/pi/syyeung/yuhuiz/Cell/IMPA/embeddings/csv/rxrx1_gene2vec_embeddings.csv
+image_path: /path/to/your/datasets/rxrx1/
+data_index_path: /path/to/your/datasets/rxrx1/metadata/rxrx1_df_subset.csv # subset for eval only, need to be downloaded from https://huggingface.co/suyc21/CellFlux
+embedding_path: /path/to/your/embeddings/csv/rxrx1_gene2vec_embeddings.csv
 
 # DATA HANDLEMENT 
-augment_train: True 
+augment_train: True
 normalize: True
-batch_size: 32
-iter_ctrl: False
-pin_mem: True
-num_workers: 10
+
+
+
+

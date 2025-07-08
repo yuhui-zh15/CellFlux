@@ -1,0 +1,26 @@
+# TASK NAME 
+task_name: cpg0000
+
+ood_set: null  # Set of held-out molecules 
+mol_list: null  # Subset of molecules to train on 
+trainable_emb: False
+dataset_name: 'cpg0000'
+n_channels: 5
+multimodal: False
+batch_correction: False
+batch_key: Null
+use_condition_embeddings: False
+add_controls: False
+condition_embedding_dimension: null
+n_mod: 1
+modality_list:
+  - Compound
+
+# DIRECTORIES FOR DATA
+image_path: /path/to/your/datasets/cpg0000_u2os_normalized_segmented_large
+data_index_path: /path/to/your/datasets/cpg0000_u2os_normalized_segmented_large/metadata/metadata_large_gene2vec_subset.csv # subset for eval only, need to be downloaded from https://huggingface.co/suyc21/CellFlux
+embedding_path: /path/to/your/embeddings/cpg0000_combined_embeddings.csv
+
+augment_train: True 
+normalize: True
+

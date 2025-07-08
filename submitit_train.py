@@ -131,7 +131,7 @@ class Trainer(object):
 
 
 def load_yaml_config(yaml_path):
-    yaml_path = "config/" + yaml_path + ".yaml"
+    yaml_path = "configs/" + yaml_path + ".yaml"
     with open(yaml_path, 'r') as file:
         yaml_data = yaml.safe_load(file)
     return yaml_data
@@ -190,7 +190,6 @@ def main():
     trainer = Trainer(args)
     job = executor.submit(trainer)
 
-    # print("Submitted job_id:", job.job_id)
     logger.info(f"Submitted job {job.job_id}")
 
 

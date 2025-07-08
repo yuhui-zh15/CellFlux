@@ -1,6 +1,6 @@
 # CellFlux: Simulating Cellular Morphology Changes via Flow Matching
 
-⚠️⚠️⚠️**Repo Under Construction**⚠️⚠️⚠️
+<!-- ⚠️⚠️⚠️**Repo Under Construction**⚠️⚠️⚠️ -->
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
@@ -38,6 +38,96 @@ CellFlux unlocks new capa-bilities such as handling batch effects or visualizing
     <img src="data/interpolation.png" width="80%">
 </div>
 
+## 🚀 Usage
+
+### Environment
+
+Create and activate the conda environment using the provided environment file:
+
+```bash
+conda env create -f environment.yml
+conda activate cellflux
+```
+
+### Data
+
+Three datasets (BBBC021, RxRx1, and JUMP/CPG0000) used in this project are same as [IMPA](https://github.com/theislab/IMPA). Pre-processed data are made available [here](https://zenodo.org/record/8307629).
+
+Additionally, for RxRx1 and CPG0000, evaluation is performed on 100 random selected perturbations. The data index CSV files for evaluation can be downloaded from [Huggingface](https://huggingface.co/suyc21/CellFlux). 
+
+In our implementation, we combined all the perturbation embeddings in CPG0000. The `combined_embeddings.csv` also needs to be downloaded from [Huggingface](https://huggingface.co/suyc21/CellFlux). 
+
+
+### Running CellFlux
+
+#### 1. Configuration Setup
+
+Before running CellFlux, update the configuration files in the `configs/` directory with your local paths:
+
+For each dataset configuration file (`bbbc021_all.yaml`, `rxrx1.yaml`, `cpg0000.yaml`), update the following paths:
+
+```yaml
+# DIRECTORIES FOR DATA
+image_path: /path/to/your/datasets/[dataset_name]
+data_index_path: /path/to/your/datasets/[dataset_name]/metadata/[metadata_file].csv
+embedding_path: /path/to/your/datasets/embeddings/[embedding_file].csv
+```
+
+#### 2. Training and Evaluation
+
+**Quick Start with Example Script:**
+```bash
+bash scripts/example.sh
+```
+
+**Using Slurm for Distributed Training:**
+```bash
+# For BBBC021 dataset
+bash scripts/slurm_bbbc021.sh
+
+# For RxRx1 dataset  
+bash scripts/slurm_rxrx1.sh
+
+# For CPG0000 dataset
+bash scripts/slurm_cpg0000.sh
+```
+
+
+#### 3. Evaluation with Pre-trained Checkpoints
+
+Pretrained model checkpoints are provided at [Huggingface](https://huggingface.co/suyc21/CellFlux).
+
+To quickly evaluate with specific checkpoints and generate images:
+
+```bash
+# Evaluate BBBC021
+bash scripts/slurm_eval_bbbc021.sh
+
+# Evaluate RxRx1
+bash scripts/slurm_eval_rxrx1.sh
+
+# Evaluate CPG0000
+bash scripts/slurm_eval_cpg0000.sh
+```
+
+These scripts will:
+- Load the specified checkpoint
+- Generate sample images
+- Calculate overall FID scores
+- Save results to the given directory
+
+#### 4. Detailed FID and KID Evaluation
+For comprehensive evaluation metrics including detailed FID and KID results:
+
+```bash
+bash scripts/eval_fid.sh
+```
+
+This script will compute:
+- Fréchet Inception Distance (FID)
+- Kernel Inception Distance (KID)
+- Detailed per-class metrics
+
 
 ## 🎯 Citation
 
@@ -50,3 +140,7 @@ If you use this repo in your research, please cite it as follows:
   year={2025}
 }
 ```
+
+## Acknowledgements
+
+This repository is built upon the [Flow Matching](https://github.com/facebookresearch/flow_matching) framework. We gratefully acknowledge their foundational work that made this project possible.

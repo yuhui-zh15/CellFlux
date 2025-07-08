@@ -47,11 +47,10 @@ def main(args):
         args_filepath = Path(args.output_dir) / "args.json"
         logger.info(f"Saving args to {args_filepath}")
         with open(args_filepath, "w") as f:
-            json.dump(vars(args), f)
+            json.dump(vars(args), f, indent=4)
 
     device = torch.device(args.device)
 
-    # fix the seed for reproducibility
     seed = args.seed + distributed_mode.get_rank()
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -60,16 +59,7 @@ def main(args):
 
     logger.info(f"Initializing Dataset: {args.dataset}")
     transform_train = get_train_transform()
-    if args.dataset == "imagenet":
-        dataset_train = datasets.ImageFolder(args.data_path, transform=transform_train)
-    elif args.dataset == "cifar10":
-        dataset_train = datasets.CIFAR10(
-            root=args.data_path,
-            train=True,
-            download=True,
-            transform=transform_train,
-        )
-    elif args.dataset in ['bbbc021', 'rxrx1', 'cpg0000']:
+    if args.dataset in ['bbbc021', 'rxrx1', 'cpg0000']:
         args.num_tasks = distributed_mode.get_world_size()
         num_tasks = args.num_tasks
         args.global_rank = distributed_mode.get_rank()
@@ -78,29 +68,10 @@ def main(args):
         datamodule = CellDataLoader(args)
         data_loader_train = datamodule.train_dataloader()
         data_loader_test = datamodule.test_dataloader()
-        # import pdb; pdb.set_trace()
     else:
         raise NotImplementedError(f"Unsupported dataset {args.dataset}")
-    if not args.dataset in ['bbbc021', 'rxrx1', 'cpg0000']:
-        logger.info(dataset_train)
 
-        logger.info("Intializing DataLoader")
-        num_tasks = distributed_mode.get_world_size()
-        global_rank = distributed_mode.get_rank()
-        sampler_train = torch.utils.data.DistributedSampler(
-            dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
-        )
-        data_loader_train = torch.utils.data.DataLoader(
-            dataset_train,
-            sampler=sampler_train,
-            batch_size=args.batch_size,
-            num_workers=args.num_workers,
-            pin_memory=args.pin_mem,
-            drop_last=True,
-        )
-        logger.info(str(sampler_train))
 
-    # define the model
     logger.info("Initializing Model")
     model = instantiate_model(
         architechture=args.dataset,
@@ -110,7 +81,6 @@ def main(args):
     model.to(device)
 
     model_without_ddp = model
-    # logger.info(str(model_without_ddp))
 
     eff_batch_size = (
         args.batch_size * args.accum_iter * distributed_mode.get_world_size()
@@ -165,31 +135,18 @@ def main(args):
         if args.distributed:
             data_loader_train.sampler.set_epoch(epoch)
         if not args.eval_only:
-            # choose train_one_epoch or my_train_one_epoch if the dataset is bbbc021
-            if args.dataset in ['bbbc021', 'rxrx1', 'cpg0000']:
-                train_stats = my_train_one_epoch(
-                    model=model,
-                    data_loader=data_loader_train,
-                    optimizer=optimizer,
-                    lr_schedule=lr_schedule,
-                    device=device,
-                    epoch=epoch,
-                    loss_scaler=loss_scaler,
-                    args=args,
-                    datamodule=datamodule,
-                    use_initial=args.use_initial,
-                )
-            else:
-                train_stats = train_one_epoch(
-                    model=model,
-                    data_loader=data_loader_train,
-                    optimizer=optimizer,
-                    lr_schedule=lr_schedule,
-                    device=device,
-                    epoch=epoch,
-                    loss_scaler=loss_scaler,
-                    args=args,
-                )
+            train_stats = my_train_one_epoch(
+                model=model,
+                data_loader=data_loader_train,
+                optimizer=optimizer,
+                lr_schedule=lr_schedule,
+                device=device,
+                epoch=epoch,
+                loss_scaler=loss_scaler,
+                args=args,
+                datamodule=datamodule,
+                use_initial=args.use_initial,
+            )
             log_stats = {
                 **{f"train_{k}": v for k, v in train_stats.items()},
                 "epoch": epoch,
@@ -223,38 +180,17 @@ def main(args):
             else:
                 fid_samples = args.fid_samples // num_tasks
             
-            if args.dataset in ['bbbc021', 'rxrx1', 'cpg0000']:
-                # import pdb; pdb.set_trace()
-                # eval_stats = my_eval_model(
-                #     model,
-                #     data_loader_test,
-                #     device,
-                #     args=args,
-                #     embedding_matrix=datamodule.embedding_matrix,
-                #     batch_correction=args.batch_correction,
-                #     n_classes=datamodule.n_mol
-                # )
-                eval_stats = eval_model(
-                    model,
-                    data_loader_test,
-                    device,
-                    epoch=epoch,
-                    fid_samples=fid_samples,
-                    args=args,
-                    datamodule=datamodule,
-                    use_initial=args.use_initial,
-                    interpolate=args.interpolate,
-                )
-            else:
-                eval_stats = eval_model(
-                    model,
-                    data_loader_train,
-                    device,
-                    epoch=epoch,
-                    fid_samples=fid_samples,
-                    args=args,
-                    datamodule=datamodule,
-                )
+            eval_stats = eval_model(
+                model,
+                data_loader_test,
+                device,
+                epoch=epoch,
+                fid_samples=fid_samples,
+                args=args,
+                datamodule=datamodule,
+                use_initial=args.use_initial,
+                interpolate=args.interpolate,
+            )
             try:
                 log_stats.update({f"eval_{k}": v for k, v in eval_stats.items()})
                 logger.info(log_stats)
@@ -275,7 +211,7 @@ def main(args):
 
 
 def load_yaml_config(yaml_path):
-    yaml_path = "config/" + yaml_path + ".yaml"
+    yaml_path = "configs/" + yaml_path + ".yaml"
     with open(yaml_path, 'r') as file:
         yaml_data = yaml.safe_load(file)
     return yaml_data
@@ -284,9 +220,8 @@ if __name__ == "__main__":
     args = get_args_parser()
     args = args.parse_args()
     yaml_config = load_yaml_config(args.config)
-    # Convert args Namespace to dict, update with YAML, then back to Namespace
-    args_dict = vars(args)  # Convert Namespace to dict
-    args_dict.update(yaml_config)  # Update with YAML data
+    args_dict = vars(args)
+    args_dict.update(yaml_config)
     args = SimpleNamespace(**args_dict)
     if args.output_dir:
         Path(args.output_dir).mkdir(parents=True, exist_ok=True)

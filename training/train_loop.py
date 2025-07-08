@@ -82,20 +82,16 @@ def my_train_one_epoch(
         if args.discrete_flow_matching:
             samples = (samples * 255.0).to(torch.long)
             t = torch.torch.rand(samples.shape[0]).to(device)
-
-            # sample probability path
             x_0 = (
                 torch.zeros(samples.shape, dtype=torch.long, device=device) + MASK_TOKEN
             )
             path_sample = path.sample(t=t, x_0=x_0, x_1=samples)
 
-            # discrete flow matching loss
             logits = model(path_sample.x_t, t=t, extra=conditioning)
             loss = torch.nn.functional.cross_entropy(
                 logits.reshape([-1, 257]), samples.reshape([-1])
             ).mean()
         else:
-            # Scaling to [-1, 1] from [0, 1]
             if args.skewed_timesteps:
                 t = skewed_timestep_sample(x_real_ctrl.shape[0], device=device)
             else:
@@ -127,8 +123,6 @@ def my_train_one_epoch(
 
         loss /= accum_iter
 
-        # Loss scaler applies the optimizer when update_grad is set to true.
-        # Otherwise just updates the internal gradient scales
         apply_update = (data_iter_step + 1) % accum_iter == 0
         loss_scaler(
             loss,

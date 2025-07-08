@@ -14,19 +14,12 @@ python submitit_train.py \
     --edm_schedule \
     --skewed_timesteps \
     --fid_samples=30720 \
-    --job_dir=/share/pi/syyeung/yuhuiz/Cell/CellFlow/outputs/0227_eval_bbbc \
-    --shared_dir=/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/shared/ \
+    --job_dir=/path/to/your/outputs/ \
+    --shared_dir=/path/to/your/shared/ \
     --use_initial=2 \
     --eval_only \
     --noise_level=1.0 \
     --save_fid_samples \
-    --resume=/share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250121_1550_bbbc_noise1.0_drop0.2_cfg0.2/checkpoint-99.pth \
-    --start_epoch 99 \
+    --resume=/path/to/your/checkpoint.pth \
+    --start_epoch=your_start_epoch \
     --ngpus=4 \
-
-
-# bbbc: /share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250125_1141_bbbc_noise1.0_drop0.2_cfg0.2_prob_0.5/checkpoint-99.pth
-# rxrx1: /share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250125_1144_rxrx1_noise1.0_drop0.2_cfg0.2_prob0.5/checkpoint-29.pth
-# cpg0000: /share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250125_1754_cpg0000_noise1.0_drop0.2_cfg0.2_prob0.5/checkpoint-79.pth
-
-# rxrx1_old: /share/pi/syyeung/yuhuiz/Cell/MorphFlow/examples/image/20250121_0227_rxrx1_noise1.0/checkpoint-19.pth
