@@ -7,7 +7,7 @@
 [![Pytorch](https://img.shields.io/badge/Pytorch-2.5-red.svg)](https://pytorch.org/get-started/previous-versions/#v25)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-This repo provides the PyTorch source code of our paper: [CellFlux: Simulating Cellular Morphology Changes via Flow Matching](https://arxiv.org/pdf/2502.09775) (ICML 2025).
+This repo provides the PyTorch source code of our paper: [CellFlux: Simulating Cellular Morphology Changes via Flow Matching](https://arxiv.org/pdf/2502.09775) (ICML 2025). Check out project page [here](https://yuhui-zh15.github.io/CellFlux/)!
 
 ## 🔮 Abstract
 
